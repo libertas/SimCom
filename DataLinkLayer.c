@@ -21,9 +21,56 @@ bool dl_init(char_queue *send_queue, char_queue *receive_queue)
   return true;
 }
 
-bool dl_receive(char *data, SIMCOM_LENGTH_TYPE length)
+bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
 {
+  char data;
+
   if(dl_initialized) {
+    return false;
+  }
+
+  static SIMCOM_LENGTH_TYPE i = 0;
+  static bool start_found = false;
+  static bool end_found = false;
+  static bool esc_found = false;
+  while(ph_receive(&data)) {
+    if(!start_found) {
+      if(data == 0x02) {
+        start_found = true;
+        dl_buf[i] = data;
+        i++;
+      }
+    } else {
+      if(!end_found) {
+        if(i >= 2) {
+          if(esc_found) {
+            dl_buf[i] = data;
+            esc_found = false;
+          } else {
+            if(data == 0x1B) {
+              esc_found = true;
+            } else if(data == 0x02) {
+              i = 0;
+              break;
+            } else if(data == 0x03) {
+              end_found = true;
+              i = 0;
+              break;
+            } else {
+              dl_buf[i] = data;
+            }
+          }
+
+        }
+      }
+    }
+  }
+
+  if(start_found && end_found) {
+    /*
+      data processing
+    */
+  } else {
     return false;
   }
 
@@ -37,7 +84,7 @@ bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
     return false;
   }
 
-  if((length << 1) + 3 > DL_BUF_LEN) {
+  if(SIMCOM_DLENGTH_TYPE(length << 1) + 3 > DL_BUF_LEN) {
     return false;
   }
 
@@ -69,9 +116,4 @@ bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
   }
 
   return true;
-}
-
-void dl_daemon()
-{
-
 }

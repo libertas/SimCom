@@ -17,12 +17,12 @@ bool ph_send(char data);
   When data received by the device, call this function
   to tell the physical layer
 */
-bool ph_received(char data);
+bool ph_receive_intr(char data);
 
 /*
   Modify it and call it timely for your own project
 */
-void ph_daemon();
+void ph_send_intr();
 
 
 #endif

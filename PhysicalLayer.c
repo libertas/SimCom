@@ -34,7 +34,7 @@ bool ph_receive(char *data)
   return out_char_queue(ph_receive_queue, data);
 }
 
-bool ph_received(char data)
+bool ph_receive_intr(char data)
 {
   if(!ph_initialized) {
     return false;
