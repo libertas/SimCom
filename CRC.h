@@ -1,0 +1,1 @@
+char crc(char *data);
