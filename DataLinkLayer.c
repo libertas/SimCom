@@ -5,18 +5,14 @@
 // [STX] [CRC] [DATA[n]] [ETX]
 char dl_buf[DL_BUF_LEN];
 
-char_queue *dl_send_queue;
-char_queue *dl_receive_queue;
 bool dl_initialized = false;
 
-bool dl_init(char_queue *send_queue, char_queue *receive_queue)
+bool dl_init()
 {
   if(dl_initialized) {
     return false;
   }
 
-  dl_send_queue = send_queue;
-  dl_receive_queue = receive_queue;
   dl_initialized = true;
   return true;
 }
