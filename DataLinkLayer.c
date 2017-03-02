@@ -5,26 +5,11 @@
 // [STX] [CRC] [DATA[n]] [ETX]
 char dl_buf[DL_BUF_LEN];
 
-bool dl_initialized = false;
-
-bool dl_init()
-{
-  if(dl_initialized) {
-    return false;
-  }
-
-  dl_initialized = true;
-  return true;
-}
 
 bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
 {
   SIMCOM_LENGTH_TYPE length_tmp;
   char c;
-
-  if(dl_initialized) {
-    return false;
-  }
 
   static SIMCOM_LENGTH_TYPE i = 0;
   static bool start_found = false;
@@ -104,9 +89,6 @@ bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
 bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
 {
   SIMCOM_LENGTH_TYPE i, j;
-  if(dl_initialized) {
-    return false;
-  }
 
   if((SIMCOM_DLENGTH_TYPE)(length << 1) + 3 > DL_BUF_LEN) {
     return false;

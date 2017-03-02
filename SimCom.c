@@ -5,9 +5,20 @@
 
 #include <stdio.h>
 #include "DataLinkLayer.h"
+#include "PhysicalLayer.h"
 
 int main()
 {
+  char s[20];
+  SIMCOM_LENGTH_TYPE length;
+
+  ph_init();
+
+  dl_send("Hello, World!\n", 14);
+  ph_send_intr();
+  dl_receive(s, &length);
+  printf("%d:%s", length, s);
+
   return 0;
 }
 
