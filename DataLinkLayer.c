@@ -23,7 +23,8 @@ bool dl_init(char_queue *send_queue, char_queue *receive_queue)
 
 bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
 {
-  char data;
+  SIMCOM_LENGTH_TYPE length_tmp;
+  char c;
 
   if(dl_initialized) {
     return false;
@@ -33,48 +34,75 @@ bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
   static bool start_found = false;
   static bool end_found = false;
   static bool esc_found = false;
-  while(ph_receive(&data)) {
+  while(ph_receive(&c)) {
+    /*
+      if the buffer if full
+    */
+    if(i >= DL_BUF_LEN){
+      i = 0;
+      start_found = false;
+      end_found = false;
+      esc_found = false;
+      continue;
+    }
+
     if(!start_found) {
-      if(data == 0x02) {
+      if(c == 0x02) {
         start_found = true;
-        dl_buf[i] = data;
+        dl_buf[i] = c;
         i++;
+        continue;
       }
     } else {
-      if(!end_found) {
-        if(i >= 2) {
-          if(esc_found) {
-            dl_buf[i] = data;
+      if(i < 2) {
+        dl_buf[i] = c;
+        i++;
+        continue;
+      } else {
+        if(esc_found) {
+          esc_found = false;
+          dl_buf[i] = c;
+          i++;
+          continue;
+        } else {
+          if(c== 0x1B) {
+            esc_found = true;
+            continue;
+          } else if(c == 0x02) {
+            i = 0;
             esc_found = false;
+            end_found = false;
+            continue;
+          } else if(c == 0x03) {
+            end_found = true;
+            length_tmp = i;
+            i = 0;
+            break;
           } else {
-            if(data == 0x1B) {
-              esc_found = true;
-            } else if(data == 0x02) {
-              i = 0;
-              break;
-            } else if(data == 0x03) {
-              end_found = true;
-              i = 0;
-              break;
-            } else {
-              dl_buf[i] = data;
-            }
+            dl_buf[i] = c;
+            i++;
+            continue;
           }
-
         }
       }
     }
   }
 
   if(start_found && end_found) {
-    /*
-      data processing
-    */
-  } else {
-    return false;
+    start_found = false;
+    end_found = false;
+    esc_found = false;
+
+    if(verify(dl_buf + 2, length_tmp - 2) == dl_buf[1]) {
+      for(SIMCOM_LENGTH_TYPE tmp = 0; tmp < length_tmp; tmp++) {
+        data[tmp] = dl_buf[tmp];
+      }
+      *length = length_tmp;
+      return true;
+    }
   }
 
-  return true;
+  return false;
 }
 
 bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
@@ -84,7 +112,7 @@ bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
     return false;
   }
 
-  if(SIMCOM_DLENGTH_TYPE(length << 1) + 3 > DL_BUF_LEN) {
+  if((SIMCOM_DLENGTH_TYPE)(length << 1) + 3 > DL_BUF_LEN) {
     return false;
   }
 
