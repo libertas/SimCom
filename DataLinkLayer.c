@@ -1,4 +1,4 @@
-#include "CRC.h"
+#include "Verify.h"
 #include "DataLinkLayer.h"
 #include "PhysicalLayer.h"
 
@@ -32,7 +32,7 @@ bool dl_receive(char *data, SIMCOM_LENGTH_TYPE length)
 
 bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
 {
-  int i, j;
+  SIMCOM_LENGTH_TYPE i, j;
   if(dl_initialized) {
     return false;
   }
@@ -55,10 +55,10 @@ bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
 
   // ETX
   dl_buf[j] = 0x03;
-  dl_buf[1] = crc(dl_buf + 2);
+  dl_buf[1] = verify(dl_buf + 2, j - 2);
 
   for(i = 0; i < j; i++) {
-    int count = 0;
+    SIMCOM_LENGTH_TYPE count = 0;
 
     while(!ph_send(dl_buf[i])) {
       if(count > DL_RETRY_TIMES) {
