@@ -110,7 +110,7 @@ bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
   dl_buf[j] = 0x03;
   dl_buf[1] = verify(dl_buf + 2, j - 2);
 
-  for(i = 0; i < j; i++) {
+  for(i = 0; i < j + 1; i++) {
     SIMCOM_LENGTH_TYPE count = 0;
 
     while(!ph_send(dl_buf[i])) {
