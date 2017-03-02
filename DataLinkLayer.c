@@ -75,10 +75,10 @@ bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
     esc_found = false;
 
     if(verify(dl_buf + 2, length_tmp - 2) == dl_buf[1]) {
-      for(SIMCOM_LENGTH_TYPE tmp = 0; tmp < length_tmp; tmp++) {
-        data[tmp] = dl_buf[tmp];
+      for(SIMCOM_LENGTH_TYPE tmp = 2; tmp < length_tmp; tmp++) {
+        data[tmp - 2] = dl_buf[tmp];
       }
-      *length = length_tmp;
+      *length = length_tmp - 2;
       return true;
     }
   }

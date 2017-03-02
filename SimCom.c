@@ -10,14 +10,16 @@
 int main()
 {
   char c;
-  char s[20];
+  char s[200];
   SIMCOM_LENGTH_TYPE length;
 
   ph_init();
 
-  dl_send("Hello, World!\n", 14);
+  dl_send("Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
   ph_send_intr();
-  printf("%d %d %s", dl_receive(s, &length), length, s);
+  dl_receive(s, &length);
+  s[length] = 0;
+  printf("%d\n%s", length, s);
 
   return 0;
 }
