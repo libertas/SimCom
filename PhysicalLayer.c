@@ -2,23 +2,23 @@
 
 char_queue *ph_send_queue;
 char_queue *ph_receive_queue;
-bool initialized = false;
+bool ph_initialized = false;
 
 bool ph_init(char_queue *send_queue, char_queue *receive_queue)
 {
-  if(initialized) {
+  if(ph_initialized) {
     return false;
   }
 
   ph_send_queue = send_queue;
   ph_receive_queue = receive_queue;
-  initialized = true;
+  ph_initialized = true;
   return true;
 }
 
 bool ph_send(char data)
 {
-  if(!initialized) {
+  if(!ph_initialized) {
     return false;
   }
 
@@ -27,7 +27,7 @@ bool ph_send(char data)
 
 bool ph_receive(char *data)
 {
-  if(!initialized) {
+  if(!ph_initialized) {
     return false;
   }
 
@@ -36,7 +36,7 @@ bool ph_receive(char *data)
 
 bool ph_received(char data)
 {
-  if(!initialized) {
+  if(!ph_initialized) {
     return false;
   }
 
