@@ -96,6 +96,7 @@ bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
 
   // STX
   dl_buf[0] = 0x02;
+  dl_buf[1] = verify(data, length);
 
   for(i = 0, j = 2; i < length; i++, j++) {
     if(data[i] <= 0x1F) {
@@ -108,7 +109,6 @@ bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
 
   // ETX
   dl_buf[j] = 0x03;
-  dl_buf[1] = verify(dl_buf + 2, j - 2);
 
   for(i = 0; i < j + 1; i++) {
     SIMCOM_LENGTH_TYPE count = 0;
