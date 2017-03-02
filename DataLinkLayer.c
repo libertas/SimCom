@@ -98,7 +98,7 @@ bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
   dl_buf[0] = 0x02;
 
   for(i = 0, j = 2; i < length; i++, j++) {
-    if(dl_buf[i] <= 0x1F) {
+    if(data[i] <= 0x1F) {
       dl_buf[j] = 0x1B;
       j++;
     }

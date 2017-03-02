@@ -9,6 +9,7 @@
 
 int main()
 {
+  char c;
   char s[20];
   SIMCOM_LENGTH_TYPE length;
 
@@ -16,8 +17,7 @@ int main()
 
   dl_send("Hello, World!\n", 14);
   ph_send_intr();
-  dl_receive(s, &length);
-  printf("%d:%s", length, s);
+  printf("%d %d %s", dl_receive(s, &length), length, s);
 
   return 0;
 }
