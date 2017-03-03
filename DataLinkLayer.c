@@ -6,6 +6,11 @@
 char dl_buf[DL_BUF_LEN];
 
 
+bool dl_init()
+{
+  return ph_init();
+}
+
 bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
 {
   SIMCOM_LENGTH_TYPE length_tmp;

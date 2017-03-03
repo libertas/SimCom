@@ -13,7 +13,7 @@ int main()
   char s[200];
   SIMCOM_LENGTH_TYPE length;
 
-  ph_init();
+  dl_init();
 
   dl_send("Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
   ph_send_intr();
