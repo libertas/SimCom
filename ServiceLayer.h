@@ -5,7 +5,7 @@
 
 #include "SimCom.h"
 
-#define SL_CALLBACK_NUM 2
+#define SL_CALLBACK_NUM 10
 #define SL_BUF_LEN 200
 
 bool sl_init();

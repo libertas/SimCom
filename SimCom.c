@@ -12,6 +12,10 @@ void callback0(char from, char to, char* data, SIMCOM_LENGTH_TYPE length)
   printf("callback %d, from %d, length %d\tdata:%s",\
     to, from, length, data);
 }
+void callback2(char from, char to, char* data, SIMCOM_LENGTH_TYPE length)
+{
+  printf("Welcome to callback2\n");
+}
 
 int main()
 {
@@ -21,14 +25,19 @@ int main()
 
   sl_config(0, callback0);
   sl_config(1, callback0);
+  sl_config(2, callback2);
   sl_init();
 
+  sl_send(0, 2, "", 0);
   sl_send(0, 0, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
   sl_send(0, 1, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
   sl_send(1, 0, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
   sl_send(1, 1, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
+  sl_send(1, 2, "", 0);
 
   ph_send_intr();
+  sl_receive_intr();
+  sl_receive_intr();
   sl_receive_intr();
   sl_receive_intr();
   sl_receive_intr();
