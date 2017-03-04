@@ -75,9 +75,11 @@ void ph_send_intr()
     ss << c;
   }
 
-  char d;
-  ss >> d;
-  ph_receive_intr(d);
+  if(ss.rdbuf()->in_avail()) {
+    char d;
+    ss >> d;
+    ph_receive_intr(d);
+  }
 
   #endif
 }
