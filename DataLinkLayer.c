@@ -34,7 +34,6 @@ bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
 
     if(!start_found) {
       if(c == 0x02) {
-        printf("start\n");
         start_found = true;
         dl_buf[i] = c;
         i++;

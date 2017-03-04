@@ -58,8 +58,6 @@ bool ph_receive_intr(char data)
     return false;
   }
 
-  printf("\treceived:%x\n", (unsigned char)data);
-
   return in_char_queue(&ph_receive_queue, data);
 }
 
@@ -77,7 +75,7 @@ void ph_send_intr()
 
   if(ss.rdbuf()->in_avail()) {
     char d;
-    ss >> d;
+    d = ss.get();
     ph_receive_intr(d);
   }
 
