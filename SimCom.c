@@ -4,6 +4,7 @@
 #ifdef TEST_SERVICE
 
 #include <stdio.h>
+#include <unistd.h>
 #include "ServiceLayer.h"
 #include "PhysicalLayer.h"
 
@@ -29,19 +30,18 @@ int main()
   sl_init();
 
   sl_send(0, 2, "", 0);
+  sl_send(0, 2, "", 0);
   sl_send(0, 0, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
   sl_send(0, 1, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
   sl_send(1, 0, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
   sl_send(1, 1, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
   sl_send(1, 2, "", 0);
 
-  ph_send_intr();
-  sl_receive_intr();
-  sl_receive_intr();
-  sl_receive_intr();
-  sl_receive_intr();
-  sl_receive_intr();
-  sl_receive_intr();
+  while(1) {
+    ph_send_intr();
+    sl_receive_intr();
+    usleep(100);
+  }
 
   return 0;
 }
