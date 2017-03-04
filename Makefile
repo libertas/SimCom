@@ -1,16 +1,16 @@
-CC = gcc
+CC = clang
 CFLAGS =
 
 test_sl: SimCom.c PhysicalLayer.c DataLinkLayer.c ServiceLayer.c Verify.c CharQueue.c
-	$(CC) $(CFLAGS) -o test_sl -g -std=c99 -D TEST_SERVICE\
+	$(CC) $(CFLAGS) -o test_sl -l serialport -g -std=gnu99 -D TEST_SERVICE\
 		SimCom.c PhysicalLayer.c DataLinkLayer.c ServiceLayer.c Verify.c CharQueue.c
 
 test_phy: SimCom.c PhysicalLayer.c CharQueue.c
-	$(CC) $(CFLAGS) -o test_phy -g -std=c99 -D TEST_PHYSICAL\
+	$(CC) $(CFLAGS) -o test_phy -l serialport -g -std=gnu99 -D TEST_PHYSICAL\
 		PhysicalLayer.c CharQueue.c SimCom.c
 
 test_ddl: SimCom.c PhysicalLayer.c DataLinkLayer.c Verify.c CharQueue.c
-	$(CC) $(CFLAGS) -o test_ddl -g -std=c99 -D TEST_DATALINK\
+	$(CC) $(CFLAGS) -o test_ddl -l serialport -g -std=gnu99 -D TEST_DATALINK\
 		SimCom.c PhysicalLayer.c DataLinkLayer.c Verify.c CharQueue.c
 
 clean:
