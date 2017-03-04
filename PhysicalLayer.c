@@ -58,7 +58,7 @@ bool ph_receive_intr(char data)
     return false;
   }
 
-  printf("\t\t%x\n", (unsigned char)data);
+  printf("\treceived:%x\n", (unsigned char)data);
 
   return in_char_queue(&ph_receive_queue, data);
 }

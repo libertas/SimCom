@@ -34,6 +34,7 @@ bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
 
     if(!start_found) {
       if(c == 0x02) {
+        printf("start\n");
         start_found = true;
         dl_buf[i] = c;
         i++;
@@ -53,9 +54,11 @@ bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
         } else {
           if(c== 0x1B) {
             esc_found = true;
+            i++;
             continue;
           } else if(c == 0x02) {
             i = 0;
+            start_found = false;
             esc_found = false;
             end_found = false;
             continue;

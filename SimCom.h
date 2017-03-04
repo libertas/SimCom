@@ -2,6 +2,7 @@
 #define _SIMCOM_H
 
 #include <stdint.h>
+#include <stdio.h>
 
 /*
   You can modify this for your own project
