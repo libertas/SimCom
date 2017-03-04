@@ -55,8 +55,9 @@ bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
             esc_found = true;
             continue;
           } else if(c == 0x02) {
-            i = 0;
-            start_found = false;
+            dl_buf[0] = c;
+            i = 1;
+            start_found = true;
             esc_found = false;
             end_found = false;
             continue;
