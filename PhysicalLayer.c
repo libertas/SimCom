@@ -24,6 +24,9 @@ bool ph_init()
   init_char_queue(&ph_receive_queue, ph_receive_queue_buf, PH_BUF_LEN);
 
   ss.Open("/dev/ttyUSB0", ios_base::in | ios_base::out);
+  if(!ss.IsOpen()) {
+    return false;
+  }
   ss.SetBaudRate(SerialStreamBuf::BAUD_115200);
   ss.SetCharSize(SerialStreamBuf::CHAR_SIZE_8);
   ss.SetNumOfStopBits(1);

@@ -27,7 +27,10 @@ int main()
   sl_config(0, callback0);
   sl_config(1, callback0);
   sl_config(2, callback2);
-  sl_init();
+  if(!sl_init()) {
+    printf("Unable to open the serial port\n");
+    return -1;
+  }
 
   sl_send(0, 2, "", 0);
   sl_send(0, 2, "", 0);
