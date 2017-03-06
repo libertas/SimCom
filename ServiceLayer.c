@@ -35,7 +35,8 @@ bool sl_receive_intr()
 {
   SIMCOM_LENGTH_TYPE length;
   if(dl_receive(sl_receive_buf, &length)) {
-    if(callbacks[(unsigned char)sl_receive_buf[1]] != 0) {
+    if((unsigned char)sl_receive_buf[1] < SL_CALLBACK_NUM\
+      && callbacks[(unsigned char)sl_receive_buf[1]] != 0) {
       callbacks[(unsigned char)sl_receive_buf[1]](sl_receive_buf[0],\
         sl_receive_buf[1],\
         sl_receive_buf + 2,\
