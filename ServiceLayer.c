@@ -34,10 +34,11 @@ bool sl_send(char from_port, char to_port, char *data, SIMCOM_LENGTH_TYPE length
 bool sl_receive_intr()
 {
   char sl_receive_buf[SL_BUF_LEN];
-  
+
   SIMCOM_LENGTH_TYPE length;
   if(dl_receive(sl_receive_buf, &length)) {
-    if(callbacks[(unsigned char)sl_receive_buf[1]] != 0) {
+    if((unsigned char)sl_receive_buf[1] < SL_CALLBACK_NUM\
+      && callbacks[(unsigned char)sl_receive_buf[1]] != 0) {
       callbacks[(unsigned char)sl_receive_buf[1]](sl_receive_buf[0],\
         sl_receive_buf[1],\
         sl_receive_buf + 2,\
