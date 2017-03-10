@@ -2,8 +2,6 @@
 #include "ServiceLayer.h"
 
 void (*callbacks[SL_CALLBACK_NUM])(char, char, char*, SIMCOM_LENGTH_TYPE) = {0};
-char sl_send_buf[SL_BUF_LEN];
-char sl_receive_buf[SL_BUF_LEN];
 
 
 bool sl_init()
@@ -23,6 +21,8 @@ bool sl_config(char port, void (*callback)(char, char, char*, SIMCOM_LENGTH_TYPE
 
 bool sl_send(char from_port, char to_port, char *data, SIMCOM_LENGTH_TYPE length)
 {
+  char sl_send_buf[SL_BUF_LEN];
+
   sl_send_buf[0] = from_port;
   sl_send_buf[1] = to_port;
   for(SIMCOM_LENGTH_TYPE i = 0; i < length; i++) {
@@ -33,6 +33,8 @@ bool sl_send(char from_port, char to_port, char *data, SIMCOM_LENGTH_TYPE length
 
 bool sl_receive_intr()
 {
+  char sl_receive_buf[SL_BUF_LEN];
+
   SIMCOM_LENGTH_TYPE length;
   if(dl_receive(sl_receive_buf, &length)) {
     if((unsigned char)sl_receive_buf[1] < SL_CALLBACK_NUM\
