@@ -79,8 +79,6 @@ bool ph_receive_intr(char data)
 
 void ph_receive_intr()
 {
-  #if (defined TEST_PHYSICAL) || (defined TEST_DATALINK) || (defined TEST_SERVICE)
-
   if(ss.rdbuf()->in_avail()) {
     char d;
     ssLock.lock();
@@ -88,8 +86,6 @@ void ph_receive_intr()
     ssLock.unlock();
     ph_receive_intr(d);
   }
-
-  #endif
 }
 
 void ph_send_intr()
@@ -98,8 +94,6 @@ void ph_send_intr()
     You must call this function timely to send the data in the queue
     This function must be modified to use different types of physical devices
   */
-  #if (defined TEST_PHYSICAL) || (defined TEST_DATALINK) || (defined TEST_SERVICE)
-
   char c;
 
   ssLock.lock();
@@ -111,6 +105,4 @@ void ph_send_intr()
 
   ph_send_lock.unlock();
   ssLock.unlock();
-
-  #endif
 }
