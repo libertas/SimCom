@@ -42,6 +42,7 @@ int main()
 
   while(1) {
     ph_send_intr();
+    ph_receive_intr();
     sl_receive_intr();
     usleep(100);
   }
@@ -68,6 +69,7 @@ int main()
 
   dl_send("Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
   ph_send_intr();
+  ph_receive_intr();
   dl_receive(s, &length);
   s[length] = 0;
   printf("%d\n%s", length, s);
@@ -93,6 +95,7 @@ int main()
     ph_send(c);
   }
   ph_send_intr();
+  ph_receive_intr();
   while(ph_receive((char*)&c)) {
     putchar(c);
   }

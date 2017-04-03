@@ -1,3 +1,5 @@
+#include <mutex>
+
 #include "Verify.h"
 #include "DataLinkLayer.h"
 #include "PhysicalLayer.h"
@@ -95,6 +97,9 @@ bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
   return false;
 }
 
+
+std::mutex dl_send_lock;
+
 bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
 {
   char dl_send_buf[DL_BUF_LEN];
@@ -104,6 +109,8 @@ bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
   if((SIMCOM_DLENGTH_TYPE)(length << 1) + 3 > DL_BUF_LEN) {
     return false;
   }
+  
+  dl_send_lock.lock();
 
   // STX
   dl_send_buf[0] = 0x02;
@@ -126,11 +133,13 @@ bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
 
     while(!ph_send(dl_send_buf[i])) {
       if(count > DL_RETRY_TIMES) {
+        dl_send_lock.unlock();
         return false;
       }
       count++;
     }
   }
 
+  dl_send_lock.unlock();
   return true;
 }

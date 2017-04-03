@@ -1,3 +1,5 @@
+#include <mutex>
+
 #include "DataLinkLayer.h"
 #include "ServiceLayer.h"
 
@@ -19,16 +21,26 @@ bool sl_config(char port, void (*callback)(char, char, char*, SIMCOM_LENGTH_TYPE
   }
 }
 
+
+std::mutex sl_send_lock;
+
 bool sl_send(char from_port, char to_port, char *data, SIMCOM_LENGTH_TYPE length)
 {
   char sl_send_buf[SL_BUF_LEN];
+
+  sl_send_lock.lock();
 
   sl_send_buf[0] = from_port;
   sl_send_buf[1] = to_port;
   for(SIMCOM_LENGTH_TYPE i = 0; i < length; i++) {
     sl_send_buf[i + 2] = data[i];
   }
-  return dl_send(sl_send_buf, length + 2);
+
+  bool result = dl_send(sl_send_buf, length + 2);
+
+  sl_send_lock.unlock();
+
+  return result;
 }
 
 bool sl_receive_intr()

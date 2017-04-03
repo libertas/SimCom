@@ -2,9 +2,14 @@
 
 #include "PhysicalLayer.h"
 
+#include <mutex>
+
 using namespace std;
 using namespace LibSerial;
 
+mutex ph_send_lock;
+
+mutex ssLock;
 SerialStream ss;
 
 char ph_send_queue_buf[PH_BUF_LEN];
@@ -43,7 +48,15 @@ bool ph_send(char data)
     return false;
   }
 
-  return in_char_queue(&ph_send_queue, data);
+  bool result;
+
+  ph_send_lock.lock();
+
+  result = in_char_queue(&ph_send_queue, data);
+
+  ph_send_lock.unlock();
+
+  return result;
 }
 
 bool ph_receive(char *data)
@@ -64,6 +77,21 @@ bool ph_receive_intr(char data)
   return in_char_queue(&ph_receive_queue, data);
 }
 
+void ph_receive_intr()
+{
+  #if (defined TEST_PHYSICAL) || (defined TEST_DATALINK) || (defined TEST_SERVICE)
+
+  if(ss.rdbuf()->in_avail()) {
+    char d;
+    ssLock.lock();
+    d = ss.get();
+    ssLock.unlock();
+    ph_receive_intr(d);
+  }
+
+  #endif
+}
+
 void ph_send_intr()
 {
   /*
@@ -71,16 +99,18 @@ void ph_send_intr()
     This function must be modified to use different types of physical devices
   */
   #if (defined TEST_PHYSICAL) || (defined TEST_DATALINK) || (defined TEST_SERVICE)
+
   char c;
+
+  ssLock.lock();
+  ph_send_lock.lock();
+
   while(out_char_queue(&ph_send_queue, &c)) {
     ss << c;
   }
 
-  if(ss.rdbuf()->in_avail()) {
-    char d;
-    d = ss.get();
-    ph_receive_intr(d);
-  }
+  ph_send_lock.unlock();
+  ssLock.unlock();
 
   #endif
 }
