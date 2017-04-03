@@ -32,6 +32,7 @@ int main()
     return -1;
   }
 
+  sl_send(0, 0, "Welcome to SimCom!\n\n", 20);
   sl_send(0, 2, "", 0);
   sl_send(0, 3, "", 0);
   sl_send(0, 0, "Hello, World!Hello, World!\n", 55);
