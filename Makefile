@@ -10,21 +10,21 @@ OBJS = SimCom.o PhysicalLayer.o DataLinkLayer.o ServiceLayer.o Verify.o CharQueu
 $(TARGET): $(OBJS)
 	$(CC) -o $(TARGET) $(CFLAGS) $(CV_LIBS) $(OBJS) -l pthread -pthread -l serial
 
-$(OBJS):%.o:%.c
+$(OBJS):%.o:%.cpp
 	$(CC) -c $(CFLAGS) $(CV_INCLUDE) -pthread $< -o $@
 
 
-test_sl: SimCom.c PhysicalLayer.c DataLinkLayer.c ServiceLayer.c Verify.c CharQueue.c
+test_sl: SimCom.cpp PhysicalLayer.cpp DataLinkLayer.cpp ServiceLayer.cpp Verify.cpp CharQueue.cpp
 	$(CC) $(CFLAGS) -o test_sl -l serial -l pthread -g -D TEST_SERVICE\
-		SimCom.c PhysicalLayer.c DataLinkLayer.c ServiceLayer.c Verify.c CharQueue.c
+		SimCom.cpp PhysicalLayer.cpp DataLinkLayer.cpp ServiceLayer.cpp Verify.cpp CharQueue.cpp
 
-test_phy: SimCom.c PhysicalLayer.c CharQueue.c
+test_phy: SimCom.cpp PhysicalLayer.cpp CharQueue.cpp
 	$(CC) $(CFLAGS) -o test_phy -l serial -l pthread -g -D TEST_PHYSICAL\
-		PhysicalLayer.c CharQueue.c SimCom.c
+		PhysicalLayer.cpp CharQueue.cpp SimCom.cpp
 
-test_ddl: SimCom.c PhysicalLayer.c DataLinkLayer.c Verify.c CharQueue.c
+test_ddl: SimCom.cpp PhysicalLayer.cpp DataLinkLayer.cpp Verify.cpp CharQueue.cpp
 	$(CC) $(CFLAGS) -o test_ddl -l serial -l pthread -g -D TEST_DATALINK\
-		SimCom.c PhysicalLayer.c DataLinkLayer.c Verify.c CharQueue.c
+		SimCom.cpp PhysicalLayer.cpp DataLinkLayer.cpp Verify.cpp CharQueue.cpp
 
 clean:
 	rm -f *.o
