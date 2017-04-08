@@ -84,19 +84,25 @@ int main()
 #ifdef TEST_PHYSICAL
 
 #include <stdio.h>
+#include <unistd.h>
 #include "PhysicalLayer.h"
 
 int main()
 {
   unsigned char c;
 
-  ph_init();
+  if(!ph_init()) {
+    printf("Unable to open the serial port\n");
+    return -1;
+  }
 
   for(c = 0; c < 0x80; c++) {
     ph_send(c);
+    ph_send_intr();
+    ph_receive_intr();
+    usleep(100);
   }
-  ph_send_intr();
-  ph_receive_intr();
+
   while(ph_receive((char*)&c)) {
     putchar(c);
   }
