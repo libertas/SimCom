@@ -11,9 +11,9 @@
 /*
   These functions should be called only by the data link layer
 */
-bool ph_init();
-bool ph_receive(char *data);
-bool ph_send(char data);
+extern "C" bool ph_init();
+extern "C" bool ph_receive(char *data);
+extern "C" bool ph_send(char data);
 
 /*
   When data received by the device, call this function
@@ -24,8 +24,8 @@ bool ph_receive_intr(char data);
 /*
   Modify it and call it timely for your own project
 */
-void ph_receive_intr();
-void ph_send_intr();
+extern "C" void ph_receive_intr();
+extern "C" void ph_send_intr();
 
 
 #endif

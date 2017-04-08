@@ -3,6 +3,6 @@
 
 #include "SimCom.h"
 
-char verify(const char *data, SIMCOM_LENGTH_TYPE length);
+extern "C" char verify(const char *data, SIMCOM_LENGTH_TYPE length);
 
 #endif
