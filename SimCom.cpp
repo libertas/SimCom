@@ -57,6 +57,7 @@ int main()
 #ifdef TEST_DATALINK
 
 #include <stdio.h>
+#include <unistd.h>
 #include "DataLinkLayer.h"
 #include "PhysicalLayer.h"
 
@@ -69,11 +70,20 @@ int main()
   dl_init();
 
   dl_send("Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
+
   ph_send_intr();
-  ph_receive_intr();
-  dl_receive(s, &length);
-  s[length] = 0;
-  printf("%d\n%s", length, s);
+
+  while(1) {
+    usleep(100);
+    ph_receive_intr();
+    dl_receive(s, &length);
+
+    if(length != 0) {
+      s[length] = 0;
+      printf("%d\n%s", length, s);
+      break;
+    }
+  }
 
   return 0;
 }
