@@ -9,6 +9,6 @@
 
 bool dl_init();
 bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length);
-bool dl_send(char *data, SIMCOM_LENGTH_TYPE length);
+bool dl_send(const char *data, SIMCOM_LENGTH_TYPE length);
 
 #endif

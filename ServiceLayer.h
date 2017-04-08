@@ -9,8 +9,8 @@
 #define SL_BUF_LEN 200
 
 bool sl_init();
-bool sl_config(char port, void (*callback)(char, char, char*, SIMCOM_LENGTH_TYPE));
-bool sl_send(char from_port, char to_port, char *data, SIMCOM_LENGTH_TYPE length);
+bool sl_config(char port, void (*callback)(char, char, const char*, SIMCOM_LENGTH_TYPE));
+bool sl_send(char from_port, char to_port, const char *data, SIMCOM_LENGTH_TYPE length);
 
 /*
   call it timely for your own project

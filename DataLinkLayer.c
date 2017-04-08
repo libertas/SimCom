@@ -14,7 +14,7 @@ bool dl_init()
 bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
 {
   char dl_receive_buf[DL_BUF_LEN];
-  
+
   SIMCOM_LENGTH_TYPE length_tmp;
   char c;
 
@@ -95,7 +95,7 @@ bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
   return false;
 }
 
-bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
+bool dl_send(const char *data, SIMCOM_LENGTH_TYPE length)
 {
   char dl_send_buf[DL_BUF_LEN];
 

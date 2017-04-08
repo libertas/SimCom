@@ -1,7 +1,7 @@
 #include "DataLinkLayer.h"
 #include "ServiceLayer.h"
 
-void (*callbacks[SL_CALLBACK_NUM])(char, char, char*, SIMCOM_LENGTH_TYPE) = {0};
+void (*callbacks[SL_CALLBACK_NUM])(char, char, const char*, SIMCOM_LENGTH_TYPE) = {0};
 
 
 bool sl_init()
@@ -9,7 +9,7 @@ bool sl_init()
   return dl_init();
 }
 
-bool sl_config(char port, void (*callback)(char, char, char*, SIMCOM_LENGTH_TYPE))
+bool sl_config(char port, void (*callback)(char, char, const char*, SIMCOM_LENGTH_TYPE))
 {
   if((int)port < SL_CALLBACK_NUM) {
     callbacks[port] = callback;
@@ -19,7 +19,7 @@ bool sl_config(char port, void (*callback)(char, char, char*, SIMCOM_LENGTH_TYPE
   }
 }
 
-bool sl_send(char from_port, char to_port, char *data, SIMCOM_LENGTH_TYPE length)
+bool sl_send(char from_port, char to_port, const char *data, SIMCOM_LENGTH_TYPE length)
 {
   char sl_send_buf[SL_BUF_LEN];
 
