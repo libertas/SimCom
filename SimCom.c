@@ -29,10 +29,10 @@ int main()
   sl_init();
 
   sl_send(0, 2, "", 0);
-  sl_send(0, 0, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
-  sl_send(0, 1, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
-  sl_send(1, 0, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
-  sl_send(1, 1, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
+  sl_send(0, 0, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 57);
+  sl_send(0, 1, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 57);
+  sl_send(1, 0, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 57);
+  sl_send(1, 1, "Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 57);
   sl_send(1, 2, "", 0);
 
   ph_send_intr();
