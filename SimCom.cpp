@@ -8,12 +8,12 @@
 #include "ServiceLayer.h"
 #include "PhysicalLayer.h"
 
-void callback0(char from, char to, char* data, SIMCOM_LENGTH_TYPE length)
+void callback0(char from, char to, const char* data, SIMCOM_LENGTH_TYPE length)
 {
   printf("callback %d, from %d, length %d\tdata:%s",\
     to, from, length, data);
 }
-void callback2(char from, char to, char* data, SIMCOM_LENGTH_TYPE length)
+void callback2(char from, char to, const char* data, SIMCOM_LENGTH_TYPE length)
 {
   printf("Welcome to callback2\n");
 }
@@ -32,7 +32,7 @@ int main()
     return -1;
   }
 
-  sl_send(0, 0, "Welcome to SimCom!\n\n", 20);
+  sl_send(0, 0, "Welcome to SimCom!\n\n", 21);
   sl_send(0, 2, "", 0);
   sl_send(0, 3, "", 0);
   sl_send(0, 0, "Hello, World!Hello, World!\n", 28);

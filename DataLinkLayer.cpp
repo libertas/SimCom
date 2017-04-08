@@ -16,7 +16,7 @@ bool dl_init()
 bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
 {
   char dl_receive_buf[DL_BUF_LEN];
-  
+
   SIMCOM_LENGTH_TYPE length_tmp;
   char c;
 
@@ -100,7 +100,7 @@ bool dl_receive(char *data, SIMCOM_LENGTH_TYPE *length)
 
 std::mutex dl_send_lock;
 
-bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
+bool dl_send(const char *data, SIMCOM_LENGTH_TYPE length)
 {
   char dl_send_buf[DL_BUF_LEN];
 
@@ -109,7 +109,7 @@ bool dl_send(char *data, SIMCOM_LENGTH_TYPE length)
   if((SIMCOM_DLENGTH_TYPE)(length << 1) + 3 > DL_BUF_LEN) {
     return false;
   }
-  
+
   dl_send_lock.lock();
 
   // STX
