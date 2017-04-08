@@ -35,10 +35,10 @@ int main()
   sl_send(0, 0, "Welcome to SimCom!\n\n", 20);
   sl_send(0, 2, "", 0);
   sl_send(0, 3, "", 0);
-  sl_send(0, 0, "Hello, World!Hello, World!\n", 55);
-  sl_send(0, 1, "Hello, World!Hello, World!\n", 55);
-  sl_send(0, 0, "Hello, World!Hello, World!\n", 55);
-  sl_send(0, 1, "Hello, World!Hello, World!\n", 55);
+  sl_send(0, 0, "Hello, World!Hello, World!\n", 28);
+  sl_send(0, 1, "Hello, World!Hello, World!\n", 28);
+  sl_send(0, 0, "Hello, World!Hello, World!\n", 28);
+  sl_send(0, 1, "Hello, World!Hello, World!\n", 28);
   sl_send(1, 2, "", 0);
 
   while(1) {
