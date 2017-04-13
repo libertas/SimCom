@@ -79,7 +79,7 @@ int main()
   sl_config(0, callback0);
   sl_config(1, callback0);
   sl_config(2, callback2);
-  if(!sl_init()) {
+  if(!simcom_init()) {
     printf("Unable to open the serial port\n");
     return -1;
   }
@@ -93,12 +93,9 @@ int main()
   sl_send(0, 1, "Hello, World!Hello, World!\n", 28);
   sl_send(1, 2, "", 0);
 
-  while(1) {
-    ph_send_intr();
-    ph_receive_intr();
-    sl_receive_intr();
-    usleep(100);
-  }
+  sleep(1);
+
+  simcom_close();
 
   return 0;
 }
