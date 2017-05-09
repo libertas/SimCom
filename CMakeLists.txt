@@ -16,3 +16,4 @@ add_compile_options(-std=c++11)
 
 add_library(simcom SHARED ${SRC_LIST})
 target_link_libraries (simcom ${CMAKE_THREAD_LIBS_INIT} serial)
+add_library(simcom_static STATIC ${SRC_LIST})
