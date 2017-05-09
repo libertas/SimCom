@@ -41,15 +41,19 @@ bool simcom_init(const char* device)
 
 bool simcom_close()
 {
-  simcom_running = false;
+  if(simcom_running) {
+    simcom_running = false;
 
-  th_send->join();
-  th_receive->join();
+    th_send->join();
+    th_receive->join();
 
-  delete th_send;
-  delete th_receive;
+    delete th_send;
+    delete th_receive;
 
-  return true;
+    return true;
+  }
+
+  return false;
 }
 
 
