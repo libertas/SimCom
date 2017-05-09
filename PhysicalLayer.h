@@ -11,7 +11,7 @@
 /*
   These functions should be called only by the data link layer
 */
-extern "C" bool ph_init();
+extern "C" bool ph_init(const char* device);
 extern "C" bool ph_receive(char *data);
 extern "C" bool ph_send(char data);
 

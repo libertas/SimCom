@@ -9,6 +9,7 @@
 #define SIMCOM_LENGTH_TYPE uint16_t
 #define SIMCOM_DLENGTH_TYPE uint32_t
 
-extern "C" bool simcom_init();
+extern "C" bool simcom_init(const char* device);
+extern "C" bool simcom_close();
 
 #endif

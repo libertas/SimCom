@@ -19,7 +19,7 @@ char_queue ph_send_queue;
 char_queue ph_receive_queue;
 bool ph_initialized = false;
 
-bool ph_init()
+bool ph_init(const char* device)
 {
   if(ph_initialized) {
     return false;
@@ -28,7 +28,7 @@ bool ph_init()
   init_char_queue(&ph_send_queue, ph_send_queue_buf, PH_BUF_LEN);
   init_char_queue(&ph_receive_queue, ph_receive_queue_buf, PH_BUF_LEN);
 
-  ss.Open("/dev/ttyUSB0", ios_base::in | ios_base::out);
+  ss.Open(device, ios_base::in | ios_base::out);
   if(!ss.IsOpen()) {
     return false;
   }

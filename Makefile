@@ -21,11 +21,11 @@ test_sl: SimCom.cpp PhysicalLayer.cpp DataLinkLayer.cpp ServiceLayer.cpp Verify.
 
 test_phy: SimCom.cpp PhysicalLayer.cpp CharQueue.cpp
 	$(CC) $(CFLAGS) -o test_phy -l serial -l pthread -g -D TEST_PHYSICAL\
-		PhysicalLayer.cpp CharQueue.cpp SimCom.cpp
+		PhysicalLayer.cpp DataLinkLayer.cpp ServiceLayer.cpp Verify.cpp CharQueue.cpp SimCom.cpp
 
 test_ddl: SimCom.cpp PhysicalLayer.cpp DataLinkLayer.cpp Verify.cpp CharQueue.cpp
 	$(CC) $(CFLAGS) -o test_ddl -l serial -l pthread -g -D TEST_DATALINK\
-		SimCom.cpp PhysicalLayer.cpp DataLinkLayer.cpp Verify.cpp CharQueue.cpp
+		SimCom.cpp PhysicalLayer.cpp DataLinkLayer.cpp ServiceLayer.cpp Verify.cpp CharQueue.cpp
 
 clean:
 	rm -f *.o

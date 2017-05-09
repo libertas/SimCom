@@ -6,9 +6,9 @@
 void (*callbacks[SL_CALLBACK_NUM])(char, char, const char*, SIMCOM_LENGTH_TYPE) = {0};
 
 
-bool sl_init()
+bool sl_init(const char* device)
 {
-  return dl_init();
+  return dl_init(device);
 }
 
 bool sl_config(char port, void (*callback)(char, char, const char*, SIMCOM_LENGTH_TYPE))

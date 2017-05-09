@@ -25,9 +25,9 @@ void simcom_receive_daemon()
 std::thread *th_send;
 std::thread *th_receive;
 
-bool simcom_init()
+bool simcom_init(const char* device)
 {
-  if(sl_init()) {
+  if(sl_init(device)) {
     simcom_running = true;
 
     th_send = new std::thread(simcom_send_daemon);
@@ -79,7 +79,7 @@ int main()
   sl_config(0, callback0);
   sl_config(1, callback0);
   sl_config(2, callback2);
-  if(!simcom_init()) {
+  if(!simcom_init("/dev/ttyUSB0")) {
     printf("Unable to open the serial port\n");
     return -1;
   }
@@ -116,7 +116,7 @@ int main()
   char s[200];
   SIMCOM_LENGTH_TYPE length;
 
-  dl_init();
+  dl_init("/dev/ttyUSB0");
 
   dl_send("Hello, World!\nHello, World!\nHello, World!\nHello, World!\n", 56);
 
@@ -150,7 +150,7 @@ int main()
 {
   unsigned char c;
 
-  if(!ph_init()) {
+  if(!ph_init("/dev/ttyUSB0")) {
     printf("Unable to open the serial port\n");
     return -1;
   }
