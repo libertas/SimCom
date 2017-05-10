@@ -9,6 +9,7 @@ set(SRC_LIST ${MAIN_FILE} PhysicalLayer.cpp DataLinkLayer.cpp ServiceLayer.cpp V
 find_package(Threads)
 
 add_compile_options(-std=c++11)
+link_directories(${LINK_DIR})
 
 add_library(simcom_static STATIC ${SRC_LIST})
 add_library(simcom SHARED ${SRC_LIST})
