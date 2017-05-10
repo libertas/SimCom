@@ -2,9 +2,13 @@ cmake_minimum_required(VERSION 3.2)
 
 project(SimCom)
 
-
 set(MAIN_FILE SimCom.cpp)
 set(SRC_LIST ${MAIN_FILE} PhysicalLayer.cpp DataLinkLayer.cpp ServiceLayer.cpp Verify.cpp CharQueue.cpp)
+
+if(DEFINED ROOT_DIR)
+  set(CMAKE_EXE_LINKER_FLAGS "--sysroot ${ROOT_DIR}")
+  set(CMAKE_SHARED_LINKER_FLAGS "--sysroot ${ROOT_DIR}")
+endif()
 
 find_package(Threads)
 
