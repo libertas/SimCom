@@ -1,16 +1,15 @@
-#include <SerialStream.h>
+#include <QSerialPort>
 
 #include "PhysicalLayer.h"
 
 #include <mutex>
 
 using namespace std;
-using namespace LibSerial;
 
 mutex ph_send_lock;
 
 mutex ssLock;
-SerialStream ss;
+QSerialPort *ss;
 
 char ph_send_queue_buf[PH_BUF_LEN];
 char ph_receive_queue_buf[PH_BUF_LEN];
@@ -28,15 +27,18 @@ bool ph_init(const char* device)
   init_char_queue(&ph_send_queue, ph_send_queue_buf, PH_BUF_LEN);
   init_char_queue(&ph_receive_queue, ph_receive_queue_buf, PH_BUF_LEN);
 
-  ss.Open(device, ios_base::in | ios_base::out);
-  if(!ss.IsOpen()) {
+  ss = new QSerialPort();
+  ss->setBaudRate(115200);
+  ss->setPortName(device);
+  ss->setDataBits(QSerialPort::Data8);
+  ss->setParity(QSerialPort::NoParity);
+  ss->setStopBits(QSerialPort::OneStop);
+  ss->setFlowControl(QSerialPort::NoFlowControl);
+
+  if(!ss->isOpen()) {
+    delete ss;
     return false;
   }
-  ss.SetBaudRate(SerialStreamBuf::BAUD_115200);
-  ss.SetCharSize(SerialStreamBuf::CHAR_SIZE_8);
-  ss.SetNumOfStopBits(1);
-  ss.SetParity(SerialStreamBuf::PARITY_NONE);
-  ss.SetFlowControl(SerialStreamBuf::FLOW_CONTROL_NONE);
 
   ph_initialized = true;
   return true;
@@ -79,10 +81,10 @@ bool ph_receive_intr(char data)
 
 void ph_receive_intr()
 {
-  if(ss.rdbuf()->in_avail()) {
+  if(ss->bytesAvailable()) {
     char d;
     ssLock.lock();
-    d = ss.get();
+    d = ss->read(&d, 1);
     ssLock.unlock();
     ph_receive_intr(d);
   }
@@ -100,7 +102,7 @@ void ph_send_intr()
   ph_send_lock.lock();
 
   while(out_char_queue(&ph_send_queue, &c)) {
-    ss << c;
+    ss->write(&c, 1);
   }
 
   ph_send_lock.unlock();
