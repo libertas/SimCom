@@ -24,7 +24,6 @@ bool ph_receive_intr(char data);
 /*
   Modify it and call it timely for your own project
 */
-extern "C" void ph_receive_intr();
 extern "C" void ph_send_intr();
 
 

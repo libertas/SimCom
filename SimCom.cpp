@@ -17,7 +17,6 @@ void simcom_send_daemon()
 void simcom_receive_daemon()
 {
   while(simcom_running) {
-    ph_receive_intr();
 		sl_receive_intr();
 	}
 }
@@ -128,7 +127,6 @@ int main()
 
   while(1) {
     usleep(100);
-    ph_receive_intr();
     dl_receive(s, &length);
 
     if(length != 0) {
@@ -162,7 +160,6 @@ int main()
   for(c = 0; c < 0x80; c++) {
     ph_send(c);
     ph_send_intr();
-    ph_receive_intr();
     usleep(100);
   }
 

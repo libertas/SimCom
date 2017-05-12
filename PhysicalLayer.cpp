@@ -1,8 +1,11 @@
+#include <QCoreApplication>
 #include <QSerialPort>
-
-#include "PhysicalLayer.h"
+#include <QTimer>
 
 #include <mutex>
+#include <thread>
+
+#include "PhysicalLayer.h"
 
 using namespace std;
 
@@ -18,6 +21,65 @@ char_queue ph_send_queue;
 char_queue ph_receive_queue;
 bool ph_initialized = false;
 
+const char* devicename = NULL;
+mutex qtLock;
+
+char qtSendChar;
+mutex qtSendLock;
+mutex qtSendLock1;
+
+void ph_receive_intr();
+
+void thread_qt()
+{
+  QCoreApplication* qa = new QCoreApplication(* new int(), (char**)"");
+
+  QTimer *qtm = new QTimer(qa);
+
+  ss = new QSerialPort(qa);
+  ss->setBaudRate(115200);
+  ss->setPortName(devicename);
+  ss->setDataBits(QSerialPort::Data8);
+  ss->setParity(QSerialPort::NoParity);
+  ss->setStopBits(QSerialPort::OneStop);
+  ss->setFlowControl(QSerialPort::NoFlowControl);
+
+  qa->connect(qtm, &QTimer::timeout, [=]() {
+    qtSendLock.lock();
+
+    ss->waitForBytesWritten(-1);
+
+    ss->write(&qtSendChar, 1);
+
+    qtSendLock1.unlock();
+
+  });
+
+  qa->connect(ss, &QSerialPort::readyRead, [=]() {
+    {
+      char d;
+
+      ss->waitForBytesWritten(-1);
+
+      ss->read(&d, 1);
+
+      ph_receive_intr(d);
+    }
+  });
+
+  if(!ss->open(QIODevice::ReadWrite)) {
+    qtLock.unlock();
+    delete ss;
+    delete qa;
+    return;
+  }
+  qtm->start(1);
+
+  ph_initialized = true;
+  qtLock.unlock();
+  qa->exec();
+}
+
 bool ph_init(const char* device)
 {
   if(ph_initialized) {
@@ -27,21 +89,15 @@ bool ph_init(const char* device)
   init_char_queue(&ph_send_queue, ph_send_queue_buf, PH_BUF_LEN);
   init_char_queue(&ph_receive_queue, ph_receive_queue_buf, PH_BUF_LEN);
 
-  ss = new QSerialPort();
-  ss->setBaudRate(115200);
-  ss->setPortName(device);
-  ss->setDataBits(QSerialPort::Data8);
-  ss->setParity(QSerialPort::NoParity);
-  ss->setStopBits(QSerialPort::OneStop);
-  ss->setFlowControl(QSerialPort::NoFlowControl);
+  devicename = device;
+  qtSendLock.lock();
+  qtSendLock1.lock();
+  qtLock.lock();
+  thread * tq = new thread(thread_qt);
+  qtLock.lock();
+  qtLock.unlock();
 
-  if(!ss->isOpen()) {
-    delete ss;
-    return false;
-  }
-
-  ph_initialized = true;
-  return true;
+  return ph_initialized;
 }
 
 bool ph_send(char data)
@@ -79,17 +135,6 @@ bool ph_receive_intr(char data)
   return in_char_queue(&ph_receive_queue, data);
 }
 
-void ph_receive_intr()
-{
-  if(ss->bytesAvailable()) {
-    char d;
-    ssLock.lock();
-    d = ss->read(&d, 1);
-    ssLock.unlock();
-    ph_receive_intr(d);
-  }
-}
-
 void ph_send_intr()
 {
   /*
@@ -98,11 +143,12 @@ void ph_send_intr()
   */
   char c;
 
-  ssLock.lock();
   ph_send_lock.lock();
 
   while(out_char_queue(&ph_send_queue, &c)) {
-    ss->write(&c, 1);
+    qtSendChar = c;
+    qtSendLock.unlock();
+    qtSendLock1.lock();
   }
 
   ph_send_lock.unlock();
