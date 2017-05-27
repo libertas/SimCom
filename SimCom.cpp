@@ -11,6 +11,7 @@ void simcom_send_daemon()
 {
   while(simcom_running) {
 		ph_send_intr();
+    std::this_thread::sleep_for(std::chrono::nanoseconds(1));
 	}
 }
 
@@ -19,6 +20,7 @@ void simcom_receive_daemon()
   while(simcom_running) {
     ph_receive_intr();
 		sl_receive_intr();
+    std::this_thread::sleep_for(std::chrono::nanoseconds(1));
 	}
 }
 
